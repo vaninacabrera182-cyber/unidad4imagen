@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desafío Visual | Unidad 4 NTICx</title>
+<style>
+:root{
+  --bg1:#111827; --bg2:#312e81; --card:#ffffff; --ink:#172033;
+  --muted:#667085; --accent:#6d5dfc; --accent2:#ec4899; --soft:#f3f4f6;
+  --ok:#15803d; --warn:#b45309;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--ink); background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.app{width:min(820px,100%)}
+.card{
+  background:rgba(255,255,255,.98); border-radius:24px; padding:clamp(22px,5vw,42px);
+  box-shadow:0 22px 70px rgba(0,0,0,.28);
+}
+.hidden{display:none}
+.badge{
+  display:inline-block; background:#ede9fe; color:#5b21b6; font-weight:800;
+  border-radius:999px; padding:7px 12px; font-size:.82rem; letter-spacing:.02em;
+}
+h1{font-size:clamp(2rem,6vw,3.4rem); line-height:1; margin:14px 0 10px}
+h2{font-size:clamp(1.45rem,4vw,2.2rem); margin:12px 0}
+p{line-height:1.55}
+.sub{color:var(--muted); margin-bottom:24px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{font-weight:700;font-size:.92rem}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+input{
+  width:100%; border:1px solid #d0d5dd; border-radius:12px; padding:13px 14px;
+  font:inherit; outline:none; background:white;
+}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #ddd6fe}
+button{
+  border:0; border-radius:13px; padding:13px 18px; font:inherit; font-weight:800;
+  cursor:pointer; transition:.18s transform,.18s opacity,.18s background;
+}
+button:hover{transform:translateY(-1px)}
+.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;width:100%;margin-top:18px}
+.secondary{background:#eef2ff;color:#3730a3}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-bottom:25px}
+.progress > div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
+.question{font-size:clamp(1.2rem,3vw,1.55rem);font-weight:850;line-height:1.35;margin-bottom:18px}
+.options{display:grid;gap:11px}
+.option{
+  width:100%; text-align:left; background:#f8fafc; color:#1f2937; border:2px solid #e5e7eb;
+  padding:15px 16px; font-weight:650;
+}
+.option:hover{background:#f3f0ff;border-color:#c4b5fd}
+.option.selected{background:#ede9fe;border-color:var(--accent);color:#4c1d95}
+.next{display:flex;justify-content:flex-end;margin-top:20px}
+.next button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.resultHero{text-align:center}
+.score{
+  width:150px;height:150px;border-radius:50%;margin:22px auto 16px;
+  display:grid;place-items:center;background:linear-gradient(135deg,#ede9fe,#fce7f3);
+  border:8px solid white;box-shadow:0 10px 35px rgba(76,29,149,.15)
+}
+.score strong{font-size:2.2rem;display:block}
+.score span{font-size:.85rem;color:var(--muted)}
+.resultGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}
+.stat{background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:14px;text-align:center}
+.stat b{display:block;font-size:1.25rem}
+.student{background:#f8fafc;border-radius:14px;padding:14px;margin:16px 0;text-align:left}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.actions button{flex:1;min-width:180px}
+.small{font-size:.86rem;color:var(--muted);text-align:center;margin-top:18px}
+@media(max-width:600px){
+  body{padding:10px;align-items:flex-start}
+  .card{border-radius:18px;padding:20px;margin-top:8px}
+  .grid,.resultGrid{grid-template-columns:1fr}
+  .topline{align-items:flex-start}
+}
+@media print{
+  body{background:white;padding:0}.card{box-shadow:none}.actions,.small{display:none}
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <section id="startScreen" class="card">
+    <span class="badge">NTICx · UNIDAD 4</span>
+    <h1>🎨 Desafío Visual</h1>
+    <p class="sub">Juego evaluativo individual sobre imagen visual, publicidad, íconos, identidad visual y formatos de archivo.</p>
+    <form id="studentForm">
+      <div class="grid">
+        <div class="field">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" autocomplete="given-name" required placeholder="Ej.: Martina">
+        </div>
+        <div class="field">
+          <label for="apellido">Apellido</label>
+          <input id="apellido" autocomplete="family-name" required placeholder="Ej.: López">
+        </div>
+        <div class="field full">
+          <label for="curso">Curso</label>
+          <input id="curso" required placeholder="Ej.: 4.º A">
+        </div>
+      </div>
+      <button class="primary" type="submit">Comenzar desafío →</button>
+    </form>
+    <p class="small">20 preguntas · 1 punto por respuesta correcta · Las opciones se mezclan automáticamente.</p>
+  </section>
+
+  <section id="quizScreen" class="card hidden">
+    <div class="topline">
+      <span id="counter" class="badge">Pregunta 1 de 20</span>
+      <span id="studentMini"></span>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+    <div id="questionText" class="question"></div>
+    <div id="options" class="options"></div>
+    <div class="next">
+      <button id="nextBtn" class="secondary" disabled>Siguiente →</button>
+    </div>
+  </section>
+
+  <section id="resultScreen" class="card hidden">
+    <div class="resultHero">
+      <span class="badge">RESULTADO FINAL</span>
+      <h2>🏁 ¡Desafío completado!</h2>
+      <div class="score"><div><strong id="scoreText">0/20</strong><span>PUNTAJE</span></div></div>
+      <h2 id="levelText"></h2>
+      <p id="encouragement" class="sub"></p>
+    </div>
+    <div id="studentResult" class="student"></div>
+    <div class="resultGrid">
+      <div class="stat"><b id="correctText">0</b>Correctas</div>
+      <div class="stat"><b id="percentText">0%</b>Porcentaje</div>
+      <div class="stat"><b id="performanceText">—</b>Nivel</div>
+    </div>
+    <div class="actions">
+      <button class="secondary" onclick="window.print()">🖨️ Imprimir resultado</button>
+      <button class="primary" style="margin-top:0" onclick="restartQuiz()">↻ Volver a empezar</button>
+    </div>
+    <p class="small">Mostrá esta pantalla a tu docente al finalizar.</p>
+  </section>
+</main>
+
+<script>
+const questions = [
+ {q:"¿Qué significa que una imagen funciona como mensaje?",a:["Que solo sirve para decorar.","Que puede transmitir información, ideas o emociones.","Que necesariamente debe contener texto.","Que siempre debe ser una fotografía."],c:"Que puede transmitir información, ideas o emociones."},
+ {q:"¿Qué es la denotación de una imagen?",a:["Lo que imaginamos al verla.","La emoción que nos produce.","La descripción objetiva de lo que aparece.","La intención del diseñador."],c:"La descripción objetiva de lo que aparece."},
+ {q:"En una imagen aparece un perro sentado junto a una puerta. ¿Cuál sería una descripción denotativa?",a:["El perro está triste.","El perro extraña a su dueño.","Hay un perro sentado junto a una puerta.","La imagen representa la soledad."],c:"Hay un perro sentado junto a una puerta."},
+ {q:"Una publicidad muestra una familia sonriendo alrededor de una mesa. Pensar que representa unión y felicidad familiar corresponde a:",a:["Denotación.","Connotación.","Formato.","Resolución."],c:"Connotación."},
+ {q:"¿Qué caracteriza a una cultura icónica?",a:["Utiliza únicamente textos largos.","Utiliza imágenes, símbolos e íconos frecuentemente para comunicar.","No utiliza tecnología.","Evita las imágenes."],c:"Utiliza imágenes, símbolos e íconos frecuentemente para comunicar."},
+ {q:"El símbolo 🔍 generalmente representa:",a:["Guardar.","Eliminar.","Buscar.","Imprimir."],c:"Buscar."},
+ {q:"¿Qué es un ícono?",a:["Una fotografía obligatoriamente.","Una representación visual de una acción, objeto o concepto.","Un archivo de audio.","Un texto publicitario."],c:"Una representación visual de una acción, objeto o concepto."},
+ {q:"¿Qué busca la abstracción visual?",a:["Agregar la mayor cantidad posible de detalles.","Simplificar una representación conservando elementos esenciales.","Convertir imágenes en sonidos.","Escribir una explicación debajo de cada imagen."],c:"Simplificar una representación conservando elementos esenciales."},
+ {q:"Una paloma blanca puede representar culturalmente la paz. Esto es un ejemplo de:",a:["Interpretación del significado de una imagen.","Resolución de imagen.","Edición de video.","Formato JPG."],c:"Interpretación del significado de una imagen."},
+ {q:"¿Cuál es uno de los objetivos habituales de la publicidad?",a:["Promocionar productos, servicios, marcas o ideas.","Eliminar imágenes de Internet.","Comprimir archivos.","Crear únicamente documentos de texto."],c:"Promocionar productos, servicios, marcas o ideas."},
+ {q:"¿Qué elementos puede utilizar una publicidad para comunicar?",a:["Solamente palabras.","Únicamente fotografías.","Imágenes, colores, textos y otros recursos visuales o sonoros.","Solamente números."],c:"Imágenes, colores, textos y otros recursos visuales o sonoros."},
+ {q:"El color en una publicidad:",a:["No influye en la comunicación.","Puede ayudar a generar asociaciones y sensaciones.","Siempre tiene el mismo significado en todas las culturas.","Solo se utiliza para decorar."],c:"Puede ayudar a generar asociaciones y sensaciones."},
+ {q:"¿Qué es un logotipo?",a:["Una identidad formada principalmente por el nombre escrito de una marca.","Una fotografía publicitaria.","Un video promocional.","Una animación GIF."],c:"Una identidad formada principalmente por el nombre escrito de una marca."},
+ {q:"¿Qué es un isotipo?",a:["Un párrafo que explica una marca.","Un símbolo visual capaz de identificar una marca sin escribir necesariamente su nombre.","Una presentación.","Un archivo de video."],c:"Un símbolo visual capaz de identificar una marca sin escribir necesariamente su nombre."},
+ {q:"Cuando el texto y el símbolo forman una composición integrada que funciona como una unidad hablamos de:",a:["JPG.","Isologo.","Podcast.","Hipervínculo."],c:"Isologo."},
+ {q:"Necesitás guardar una fotografía ocupando un tamaño relativamente reducido. ¿Qué formato es muy utilizado?",a:["JPG/JPEG.","MP3.","TXT.","DOCX."],c:"JPG/JPEG."},
+ {q:"Necesitás guardar un gráfico con fondo transparente. ¿Qué formato sería apropiado?",a:["PNG.","TXT.","MP3.","DOCX."],c:"PNG."},
+ {q:"¿Qué formato permite crear animaciones sencillas de imágenes?",a:["PDF.","GIF.","TXT.","WAV."],c:"GIF."},
+ {q:"Queremos que un logo pueda agrandarse mucho sin perder calidad. ¿Qué formato resulta especialmente adecuado?",a:["SVG.","MP3.","TXT.","WAV."],c:"SVG."},
+ {q:"¿Para qué sirven los editores de imágenes y videos?",a:["Únicamente para escribir textos.","Para modificar y combinar recursos visuales y crear mensajes mediante imágenes y videos.","Solo para navegar por Internet.","Exclusivamente para escuchar música."],c:"Para modificar y combinar recursos visuales y crear mensajes mediante imágenes y videos."}
+];
+
+let index=0, score=0, selected=null, student={};
+
+const $ = id => document.getElementById(id);
+const shuffle = arr => {
+  const x=[...arr];
+  for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}
+  return x;
+};
+
+$("studentForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  student={nombre:$("nombre").value.trim(),apellido:$("apellido").value.trim(),curso:$("curso").value.trim()};
+  $("startScreen").classList.add("hidden");
+  $("quizScreen").classList.remove("hidden");
+  $("studentMini").textContent=`${student.nombre} · ${student.curso}`;
+  renderQuestion();
+});
+
+function renderQuestion(){
+  selected=null;
+  $("nextBtn").disabled=true;
+  const item=questions[index];
+  $("counter").textContent=`Pregunta ${index+1} de ${questions.length}`;
+  $("progressBar").style.width=`${((index+1)/questions.length)*100}%`;
+  $("questionText").textContent=item.q;
+  $("options").innerHTML="";
+  shuffle(item.a).forEach(answer=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.type="button";
+    b.textContent=answer;
+    b.onclick=()=>{
+      selected=answer;
+      document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));
+      b.classList.add("selected");
+      $("nextBtn").disabled=false;
+    };
+    $("options").appendChild(b);
+  });
+  $("nextBtn").textContent=index===questions.length-1 ? "Finalizar ✓" : "Siguiente →";
+}
+
+$("nextBtn").addEventListener("click",()=>{
+  if(selected===null)return;
+  if(selected===questions[index].c) score++;
+  index++;
+  if(index<questions.length) renderQuestion(); else showResults();
+});
+
+function getLevel(s){
+  if(s>=18)return {name:"Excelente",icon:"🏆",msg:"Dominio excelente de los contenidos de la Unidad 4."};
+  if(s>=15)return {name:"Muy bueno",icon:"⭐",msg:"Muy buen manejo de los conceptos trabajados."};
+  if(s>=12)return {name:"Bueno",icon:"👍",msg:"Buen trabajo. Hay algunos conceptos que podés seguir reforzando."};
+  if(s>=8)return {name:"En proceso",icon:"📚",msg:"Estás avanzando. Conviene repasar los temas principales de la unidad."};
+  return {name:"Necesita reforzar",icon:"🔄",msg:"Repasá los contenidos y volvé a intentarlo para afianzar lo aprendido."};
+}
+
+function showResults(){
+  $("quizScreen").classList.add("hidden");
+  $("resultScreen").classList.remove("hidden");
+  const pct=Math.round((score/questions.length)*100);
+  const level=getLevel(score);
+  $("scoreText").textContent=`${score}/${questions.length}`;
+  $("correctText").textContent=score;
+  $("percentText").textContent=`${pct}%`;
+  $("performanceText").textContent=level.name;
+  $("levelText").textContent=`${level.icon} ${level.name}`;
+  $("encouragement").textContent=level.msg;
+  $("studentResult").innerHTML=`<strong>Alumno/a:</strong> ${escapeHTML(student.nombre)} ${escapeHTML(student.apellido)}<br><strong>Curso:</strong> ${escapeHTML(student.curso)}`;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function restartQuiz(){
+  index=0; score=0; selected=null; student={};
+  $("resultScreen").classList.add("hidden");
+  $("startScreen").classList.remove("hidden");
+  $("studentForm").reset();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function escapeHTML(s){
+  return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+</script>
+</body>
+</html>
